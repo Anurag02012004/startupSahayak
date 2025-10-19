@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -11,33 +11,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, Send, ArrowRight, Save, Download } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
-import { useSession } from "next-auth/react"
-
-// Mock function to check if user has evaluations left
-const checkUserEvaluationsLeft = (userId: string | null) => {
-  // In a real app, this would check against a database
-  // For demo, we'll use localStorage to simulate this
-  if (!userId) return 0
-
-  const evaluationsUsed = localStorage.getItem(`evaluations_${userId}`)
-  if (!evaluationsUsed) {
-    localStorage.setItem(`evaluations_${userId}`, "0")
-    return 1 // Free users get 1 evaluation
-  }
-
-  const used = Number.parseInt(evaluationsUsed)
-  // Free users get 1 evaluation, Pro users get 10, Enterprise gets unlimited
-  const userPlan = localStorage.getItem(`plan_${userId}`) || "free"
-
-  if (userPlan === "free" && used >= 1) return 0
-  if (userPlan === "pro" && used >= 10) return 0
-  if (userPlan === "enterprise") return 999 // Unlimited
-
-  return userPlan === "free" ? 1 - used : userPlan === "pro" ? 10 - used : 0
-}
 
 export default function EvaluatePage() {
-  const session = useSession()
   const router = useRouter()
   const { toast } = useToast()
 
@@ -72,26 +47,8 @@ export default function EvaluatePage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<string | null>(null)
-  const [evaluationsLeft, setEvaluationsLeft] = useState<number>(1)
 
-  const isAuthenticated = session.status === "authenticated"
-  const userData = session.data?.user
-
-  useEffect(() => {
-    if (userData?.email) {
-      const userId = userData.email
-      const left = checkUserEvaluationsLeft(userId)
-      setEvaluationsLeft(left)
-
-      if (left <= 0) {
-        toast({
-          title: "No evaluations left",
-          description: "You've used all your free evaluations. Please upgrade to continue.",
-          variant: "destructive",
-        })
-      }
-    }
-  }, [session, toast, userData])
+  // Removed authentication requirement - anyone can use the evaluation feature now
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -162,9 +119,7 @@ export default function EvaluatePage() {
     setStep((prev) => prev - 1)
   }
 
-  const submitEvaluation = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const submitEvaluation = async () => {
     if (!validateStep(step)) {
       toast({
         title: "Please fill all required fields",
@@ -174,25 +129,8 @@ export default function EvaluatePage() {
       return
     }
 
-    if (!isAuthenticated) {
-      toast({
-        title: "Login required",
-        description: "Please login to evaluate your idea.",
-        variant: "destructive",
-      })
-      router.push("/login")
-      return
-    }
-
-    if (evaluationsLeft <= 0) {
-      toast({
-        title: "No evaluations left",
-        description: "You've used all your free evaluations. Please upgrade to continue.",
-        variant: "destructive",
-      })
-      router.push("/pricing")
-      return
-    }
+    // Removed authentication and evaluation limit checks
+    // Anyone can now use this feature freely
 
     setIsLoading(true)
 
@@ -287,13 +225,7 @@ export default function EvaluatePage() {
         setIsLoading(false)
         setStep(4)
 
-        // Update user's evaluation count
-        if (userData?.email) {
-          const userId = userData.email
-          const used = Number.parseInt(localStorage.getItem(`evaluations_${userId}`) || "0")
-          localStorage.setItem(`evaluations_${userId}`, (used + 1).toString())
-          setEvaluationsLeft((prev) => prev - 1)
-        }
+        // Removed evaluation count tracking
       }, 3000)
     } catch (error) {
       console.error("Error evaluating idea:", error)
@@ -309,26 +241,23 @@ export default function EvaluatePage() {
   const saveResult = () => {
     if (!result) return
 
-    // In a real app, this would save to a database
-    // For demo, we'll save to localStorage
-    if (userData?.email) {
-      const savedIdeas = JSON.parse(localStorage.getItem(`saved_ideas_${userData.email}`) || "[]")
-      savedIdeas.push({
-        id: Date.now(),
-        title: formData.ideaTitle,
-        description: formData.ideaDescription,
-        industry: formData.industry,
-        evaluation: result,
-        date: new Date().toISOString(),
-        score: Number.parseInt(result.match(/Overall Potential Score: (\d+)\/100/)?.[1] || "0"),
-      })
-      localStorage.setItem(`saved_ideas_${userData.email}`, JSON.stringify(savedIdeas))
+    // Save to localStorage (no authentication required)
+    const savedIdeas = JSON.parse(localStorage.getItem(`saved_ideas`) || "[]")
+    savedIdeas.push({
+      id: Date.now(),
+      title: formData.ideaTitle,
+      description: formData.ideaDescription,
+      industry: formData.industry,
+      evaluation: result,
+      date: new Date().toISOString(),
+      score: Number.parseInt(result.match(/Overall Potential Score: (\d+)\/100/)?.[1] || "0"),
+    })
+    localStorage.setItem(`saved_ideas`, JSON.stringify(savedIdeas))
 
-      toast({
-        title: "Idea saved",
-        description: "Your evaluated idea has been saved to your dashboard.",
-      })
-    }
+    toast({
+      title: "Idea saved",
+      description: "Your evaluated idea has been saved locally.",
+    })
   }
 
   const downloadResult = () => {
@@ -349,23 +278,7 @@ export default function EvaluatePage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold">Evaluate Your Startup Idea</h1>
-            <p className="text-gray-600 mt-2">Get AI-powered insights tailored for the Indian market</p>
-
-            {evaluationsLeft <= 0 && (
-              <div className="mt-4 bg-red-50 text-red-800 p-3 rounded-lg">
-                You've used all your free evaluations.{" "}
-                <a href="/pricing" className="underline font-medium">
-                  Upgrade your plan
-                </a>{" "}
-                to continue.
-              </div>
-            )}
-
-            {evaluationsLeft > 0 && (
-              <div className="mt-4 bg-blue-50 text-blue-800 p-3 rounded-lg">
-                You have {evaluationsLeft} evaluation{evaluationsLeft !== 1 ? "s" : ""} remaining on your current plan.
-              </div>
-            )}
+            <p className="text-gray-600 mt-2">Get AI-powered insights tailored for the Indian market - No login required!</p>
           </div>
 
           {/* Progress Steps */}
@@ -466,7 +379,6 @@ export default function EvaluatePage() {
                   <Button
                     onClick={nextStep}
                     className="bg-orange-600 hover:bg-orange-700"
-                    disabled={evaluationsLeft <= 0}
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -577,7 +489,7 @@ export default function EvaluatePage() {
                   <Button
                     onClick={submitEvaluation}
                     className="bg-orange-600 hover:bg-orange-700"
-                    disabled={isLoading || evaluationsLeft <= 0}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
@@ -585,7 +497,7 @@ export default function EvaluatePage() {
                       </>
                     ) : (
                       <>
-                        Evaluate Idea <Send className="ml-2 h-4 w-4" />
+                        Get Evaluation <ArrowRight className="ml-2 h-4 w-4" />
                       </>
                     )}
                   </Button>

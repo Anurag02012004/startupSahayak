@@ -7,13 +7,16 @@ import { useChat } from "ai/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar } from "@/components/ui/avatar"
-import { Lightbulb, Send, User } from "lucide-react"
+import { Lightbulb, Send, User, Sparkles } from "lucide-react"
 import { motion } from "framer-motion"
 import DashboardNav from "@/components/dashboard-nav"
 
 export default function ChatPage() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
     api: "/api/chat",
+    onError: (error) => {
+      console.error("Chat error:", error)
+    },
   })
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -109,6 +112,15 @@ export default function ChatPage() {
               )}
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Error display */}
+            {error && (
+              <div className="px-4 py-2 bg-red-50 border-t border-red-200">
+                <p className="text-sm text-red-600">
+                  ⚠️ Error: {error.message || "Failed to send message. Please check your API key configuration."}
+                </p>
+              </div>
+            )}
 
             {/* Input form */}
             <div className="border-t border-gray-200 p-4">
