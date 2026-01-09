@@ -1,6 +1,6 @@
-# ⚡ QUICK START - StartupSahayak Chatbot
+# QUICK START - StartupSahayak Chatbot
 
-## 🚀 3-Step Setup (5 Minutes)
+## 3-Step Setup (5 Minutes)
 
 ### Step 1: Get Grok API Key (2 min)
 1. Go to: **https://console.x.ai/**
@@ -23,17 +23,17 @@ npm run dev
 
 ---
 
-## ✅ What's Fixed
+## What's Fixed
 
-- ✅ Chatbot works with **Grok API**
-- ✅ **No login required**
-- ✅ Error-free
-- ✅ Dependencies installed
-- ✅ Ready to use!
+- Chatbot works with **Grok API**
+- **No login required**
+- Error-free
+- Dependencies installed
+- Ready to use!
 
 ---
 
-## 🎯 Test It Now
+## Test It Now
 
 ### Try the Chat:
 ```
@@ -51,7 +51,7 @@ Fill in your startup idea and get AI feedback!
 
 ---
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 **"Grok API key not configured"**
 → Check `.env.local` has your key
@@ -64,7 +64,7 @@ Fill in your startup idea and get AI feedback!
 
 ---
 
-## 📚 Full Documentation
+## Full Documentation
 
 - `CHATBOT_FIX_README.md` - Complete guide
 - `SETUP_GUIDE.md` - Detailed instructions
@@ -72,10 +72,10 @@ Fill in your startup idea and get AI feedback!
 
 ---
 
-## 🎉 You're Ready!
+## You're Ready!
 
 Your AI chatbot is now working and ready to help Indian entrepreneurs!
 
 **Need help?** Read the full guides above.
 
-**Happy Building! 🚀**
+**Happy Building! **

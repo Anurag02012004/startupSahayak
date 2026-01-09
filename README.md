@@ -1,4 +1,4 @@
-# 🚀 StartupSahayak - AI-Powered Startup Mentor
+# StartupSahayak - AI-Powered Startup Mentor
 
 > Your intelligent AI assistant for validating and building successful startups in the Indian market
 
@@ -11,24 +11,24 @@
 
 **StartupSahayak** (Sanskrit: सहायक meaning "assistant" or "helper") is an AI-driven platform designed to help aspiring entrepreneurs evaluate their startup ideas and transform them into successful ventures. It acts as a virtual startup mentor, analyzing an idea's potential, suggesting improvements, and guiding users through the process of building a viable business — all personalized for the **Indian startup ecosystem**.
 
-### ✨ Key Features
+### Key Features
 
-- 🤖 **AI Chat Advisor** - Real-time chat with an AI expert on Indian startup ecosystem
-- 📊 **Idea Evaluation** - Comprehensive AI-powered analysis of startup potential
-- 🇮🇳 **India-Focused** - Specialized insights for the Indian market
-- 🔓 **No Login Required** - Free and accessible to everyone
-- ⚡ **Real-time Streaming** - Fast, responsive AI interactions
-- 💾 **Local Save** - Save your evaluations in browser
+- **AI Chat Advisor** - Real-time chat with an AI expert on Indian startup ecosystem
+- **Idea Evaluation** - Comprehensive AI-powered analysis of startup potential
+- **India-Focused** - Specialized insights for the Indian market
+- **No Login Required** - Free and accessible to everyone
+- **Real-time Streaming** - Fast, responsive AI interactions
+- **Local Save** - Save your evaluations in browser
 
 ---
 
-## 🚨 CHATBOT IS NOW FIXED! ✅
+## CHATBOT IS NOW FIXED! 
 
 ### What's New:
-- ✅ **Integrated with Grok API** (xAI's powerful AI)
-- ✅ **Removed login requirements** - Anyone can use it!
-- ✅ **Error-free and tested**
-- ✅ **Ready to deploy**
+- **Integrated with Grok API** (xAI's powerful AI)
+- **Removed login requirements** - Anyone can use it!
+- **Error-free and tested**
+- **Ready to deploy**
 
 ### Quick Start:
 
@@ -49,7 +49,7 @@ npm run dev
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -61,9 +61,9 @@ npm run dev
 
 ---
 
-## ✨ Features
+## Features
 
-### 🤖 AI Chat Advisor (`/chat`)
+### AI Chat Advisor (`/chat`)
 
 Get real-time advice from an AI expert specializing in the Indian startup ecosystem:
 
@@ -79,7 +79,7 @@ Get real-time advice from an AI expert specializing in the Indian startup ecosys
 - "How do I apply for Startup India recognition?"
 - "Which tier 2 cities are best for testing my product?"
 
-### 📊 Startup Idea Evaluation (`/evaluate`)
+### Startup Idea Evaluation (`/evaluate`)
 
 Comprehensive AI-powered analysis of your startup idea:
 
@@ -114,7 +114,7 @@ Comprehensive AI-powered analysis of your startup idea:
 
 ---
 
-## 🚀 Quick Start (5 Minutes)
+## Quick Start (5 Minutes)
 
 ### Prerequisites
 
@@ -157,18 +157,18 @@ npm run dev
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [`QUICK_START.md`](./QUICK_START.md) | ⚡ Get started in 3 steps |
+| [`QUICK_START.md`](./QUICK_START.md) | Get started in 3 steps |
 | [`CHATBOT_FIX_README.md`](./CHATBOT_FIX_README.md) | 📖 Complete chatbot guide |
-| [`SETUP_GUIDE.md`](./SETUP_GUIDE.md) | 🔧 Detailed setup instructions |
-| [`CHANGES_SUMMARY.md`](./CHANGES_SUMMARY.md) | 📝 All changes made |
+| [`SETUP_GUIDE.md`](./SETUP_GUIDE.md) | Detailed setup instructions |
+| [`CHANGES_SUMMARY.md`](./CHANGES_SUMMARY.md) | All changes made |
 
 ---
 
-## 🌐 API Endpoints
+## API Endpoints
 
 ### `POST /api/chat`
 
@@ -177,9 +177,9 @@ Real-time chat with AI advisor.
 **Request:**
 ```json
 {
-  "messages": [
-    { "role": "user", "content": "Your question here" }
-  ]
+ "messages": [
+ { "role": "user", "content": "Your question here" }
+ ]
 }
 ```
 
@@ -192,12 +192,12 @@ Evaluate startup idea with comprehensive analysis.
 **Request:**
 ```json
 {
-  "messages": [
-    {
-      "role": "user",
-      "content": "Detailed startup idea description"
-    }
-  ]
+ "messages": [
+ {
+ "role": "user",
+ "content": "Detailed startup idea description"
+ }
+ ]
 }
 ```
 
@@ -205,7 +205,7 @@ Evaluate startup idea with comprehensive analysis.
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 ### Deploy to Vercel (Recommended)
 
@@ -252,31 +252,31 @@ Optional:
 ```
 startupSahayak/
 ├── app/
-│   ├── api/
-│   │   ├── chat/
-│   │   │   └── route.ts          # Chat API with Grok
-│   │   ├── evaluate/
-│   │   │   └── route.ts          # Evaluation API
-│   │   └── auth/                 # NextAuth (optional)
-│   ├── chat/
-│   │   └── page.tsx              # Chat interface
-│   ├── evaluate/
-│   │   └── page.tsx              # Evaluation form
-│   └── (other pages...)
+│ ├── api/
+│ │ ├── chat/
+│ │ │ └── route.ts # Chat API with Grok
+│ │ ├── evaluate/
+│ │ │ └── route.ts # Evaluation API
+│ │ └── auth/ # NextAuth (optional)
+│ ├── chat/
+│ │ └── page.tsx # Chat interface
+│ ├── evaluate/
+│ │ └── page.tsx # Evaluation form
+│ └── (other pages...)
 ├── components/
-│   ├── ui/                       # shadcn/ui components
-│   └── (custom components...)
+│ ├── ui/ # shadcn/ui components
+│ └── (custom components...)
 ├── lib/
-│   └── utils.ts                  # Utility functions
-├── public/                       # Static assets
-├── .env.local                    # Your API keys (DON'T COMMIT!)
-├── .env.example                  # Environment template
+│ └── utils.ts # Utility functions
+├── public/ # Static assets
+├── .env.local # Your API keys (DON'T COMMIT!)
+├── .env.example # Environment template
 └── (documentation files...)
 ```
 
 ---
 
-## 🎯 Use Cases
+## Use Cases
 
 ### For Entrepreneurs
 - Validate startup ideas before investing time/money
@@ -309,12 +309,12 @@ Contributions are welcome! Here's how you can help:
 5. **Open a Pull Request**
 
 ### Areas for Contribution
-- 🌐 Add multilingual support (Hindi, Tamil, Telugu)
-- 📊 Improve evaluation algorithms
-- 🎨 Enhance UI/UX
-- 📝 Add more documentation
+- Add multilingual support (Hindi, Tamil, Telugu)
+- Improve evaluation algorithms
+- Enhance UI/UX
+- Add more documentation
 - 🐛 Fix bugs
-- ✨ Suggest new features
+- Suggest new features
 
 ---
 
@@ -388,6 +388,6 @@ If you find this project useful, please consider giving it a star! ⭐
 
 ---
 
-**Status:** ✅ Production Ready | 🚀 Actively Maintained
+**Status:** Production Ready | Actively Maintained
 
 **Last Updated:** October 19, 2025

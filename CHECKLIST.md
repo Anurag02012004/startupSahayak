@@ -1,23 +1,23 @@
-# ✅ StartupSahayak Setup Checklist
+# StartupSahayak Setup Checklist
 
 Use this checklist to ensure everything is set up correctly.
 
 ---
 
-## 📋 Pre-Setup Checklist
+## Pre-Setup Checklist
 
 - [ ] Node.js 18+ is installed
-  - Check: `node --version`
-  
+ - Check: `node --version`
+ 
 - [ ] npm is installed
-  - Check: `npm --version`
+ - Check: `npm --version`
 
 - [ ] Git is installed (optional, for version control)
-  - Check: `git --version`
+ - Check: `git --version`
 
 ---
 
-## 🔑 API Key Setup
+## API Key Setup
 
 - [ ] Created account at [console.x.ai](https://console.x.ai/)
 - [ ] Generated Grok API key
@@ -28,7 +28,7 @@ Use this checklist to ensure everything is set up correctly.
 
 ---
 
-## 📦 Installation Checklist
+## Installation Checklist
 
 - [ ] Ran `npm install --legacy-peer-deps`
 - [ ] Installation completed without errors
@@ -37,7 +37,7 @@ Use this checklist to ensure everything is set up correctly.
 
 ---
 
-## 🚀 First Run Checklist
+## First Run Checklist
 
 - [ ] Ran `npm run dev`
 - [ ] Server started successfully
@@ -46,7 +46,7 @@ Use this checklist to ensure everything is set up correctly.
 
 ---
 
-## 🧪 Testing Checklist
+## Testing Checklist
 
 ### Home Page
 - [ ] Homepage loads at `http://localhost:3000`
@@ -80,7 +80,7 @@ Use this checklist to ensure everything is set up correctly.
 
 ---
 
-## 🔍 Verification Checklist
+## Verification Checklist
 
 ### Files Exist
 - [ ] `.env.local` (with your API key)
@@ -118,7 +118,7 @@ If something doesn't work:
 
 ---
 
-## 🎯 Example Tests
+## Example Tests
 
 ### Test 1: Ask About Startup India
 ```
@@ -140,9 +140,9 @@ Expected: List of investors with details
 
 ---
 
-## 📊 Success Criteria
+## Success Criteria
 
-✅ **All tests pass** = Chatbot is working correctly!
+ **All tests pass** = Chatbot is working correctly!
 
 Your chatbot is ready when:
 - [ ] Chat page loads and responds
@@ -154,7 +154,7 @@ Your chatbot is ready when:
 
 ---
 
-## 🚀 Deployment Checklist
+## Deployment Checklist
 
 When ready to deploy:
 
@@ -170,7 +170,7 @@ When ready to deploy:
 
 ---
 
-## 📝 Documentation Review
+## Documentation Review
 
 - [ ] Read `QUICK_START.md`
 - [ ] Reviewed `CHATBOT_FIX_README.md`
@@ -179,17 +179,17 @@ When ready to deploy:
 
 ---
 
-## 🎉 Final Verification
+## Final Verification
 
-When everything is ✅:
+When everything is :
 
 ```bash
 # Your chatbot is:
-✅ Installed
-✅ Configured
-✅ Working
-✅ Tested
-✅ Ready to use!
+ Installed
+ Configured
+ Working
+ Tested
+ Ready to use!
 ```
 
 ---
@@ -206,9 +206,9 @@ If any item is ❌:
 
 ---
 
-## 🎯 Next Steps After Setup
+## Next Steps After Setup
 
-Once all items are ✅:
+Once all items are :
 
 1. **Customize:** Update branding and colors
 2. **Enhance:** Add more features
@@ -218,7 +218,7 @@ Once all items are ✅:
 
 ---
 
-**Happy Building! 🚀**
+**Happy Building! **
 
 *Use this checklist every time you set up the project on a new machine.*
 
