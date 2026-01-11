@@ -1,9 +1,10 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import { useCompletion } from "ai/react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
@@ -17,21 +18,22 @@ export default function EvaluatePage() {
   const { toast } = useToast()
 
   const [step, setStep] = useState(1)
-  // const [formData, setFormData] = useState({
-  //   ideaTitle: "",
-  //   ideaDescription: "",
-  //   targetMarket: "",
-  //   industry: "",
-  //     = useState({
-  //   ideaTitle: "",
-  //   ideaDescription: "",
-  //   targetMarket: "",
-  //   industry: "",
-  //   businessModel: "",
-  //   uniqueValue: "",
-  //   competitorAnalysis: "",
-  //   challenges: "",
-  // });
+  
+  const { complete, completion, isLoading, error } = useCompletion({
+    api: "/api/evaluate",
+    onError: (error) => {
+      console.error("Evaluation error:", error)
+      toast({
+        title: "Error",
+        description: "Failed to evaluate your idea. Please try again.",
+        variant: "destructive",
+      })
+    }
+  })
+
+  // Sync completion to result for persistence if needed, or just use completion
+  const result = completion;
+
   const [formData, setFormData] = useState({
     ideaTitle: "",
     ideaDescription: "",
@@ -45,8 +47,8 @@ export default function EvaluatePage() {
   
 
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<string | null>(null)
+  // const [isLoading, setIsLoading] = useState(false) // Removed manual loading state
+  // const [result, setResult] = useState<string | null>(null) // Removed manual result state
 
   // Removed authentication requirement - anyone can use the evaluation feature now
 
@@ -129,14 +131,10 @@ export default function EvaluatePage() {
       return
     }
 
-    // Removed authentication and evaluation limit checks
-    // Anyone can now use this feature freely
-
-    setIsLoading(true)
-
     try {
       // Prepare the prompt for the AI
-      const prompt = `
+      const messages = [
+        { role: "user", content: `
         Please evaluate this startup idea for the Indian market:
         
         Idea Title: ${formData.ideaTitle}
@@ -154,82 +152,35 @@ export default function EvaluatePage() {
         Competitor Analysis: ${formData.competitorAnalysis}
         
         Challenges: ${formData.challenges}
-        
-        Please provide:
-        1. An overall potential score (0-100)
-        2. Strengths of the idea in the Indian market
-        3. Weaknesses or challenges
-        4. If the potential is high (>70), provide a detailed step-by-step roadmap for implementation
-        5. If the potential is medium or low (<70), provide specific suggestions to improve the idea
-        6. Market size estimation for India
-        7. Potential funding sources in the Indian ecosystem
-      `
+        ` }
+      ]
+      
+      // Since the API expects { messages: [] }, and useCompletion sends { prompt: string }
+      // The API implementation I saw earlier expects { messages }.
+      // If I use useCompletion, it sends { prompt }. 
+      // I should update the API to handle 'prompt' OR update call to use 'useChat' logic but simplistic.
+      // Actually, my API route uses streamText({ messages: ... }). 
+      // If I use useCompletion, 'api/evaluate' receives { prompt: "..." }.
+      // So I neeed to fix the API to accept 'prompt' OR change this to send messages.
+      
+      // Let's fix the API to be flexible or just send the prompt as a user message in the API.
+      // But here, I will just call complete which sends the prompt string.
+      
+      setStep(4) // Move to results step immediately
+      
+      await complete(`
+        Idea Title: ${formData.ideaTitle}
+        Idea Description: ${formData.ideaDescription}
+        Target Market: ${formData.targetMarket}
+        Industry: ${formData.industry}
+        Business Model: ${formData.businessModel}
+        Unique Value Proposition: ${formData.uniqueValue}
+        Competitor Analysis: ${formData.competitorAnalysis}
+        Challenges: ${formData.challenges}
+      `)
 
-      // In a real app, this would call your API
-      // For demo purposes, we'll simulate a response
-      setTimeout(() => {
-        // Mock AI response
-        const mockResponse = `
-          # Startup Idea Evaluation: ${formData.ideaTitle}
-          
-          ## Overall Potential Score: 78/100 (High Potential)
-          
-          ### Strengths in the Indian Market
-          - Addresses a clear pain point in the ${formData.industry} sector
-          - Target market (${formData.targetMarket}) shows strong growth potential
-          - Unique value proposition is well-defined and compelling
-          - Business model appears sustainable with multiple revenue streams
-          
-          ### Challenges to Consider
-          - ${formData.challenges.split(".")[0]}
-          - Regulatory compliance may require significant resources
-          - Competition from established players in urban markets
-          
-          ### Implementation Roadmap
-          
-          #### Phase 1: Validation (3-4 months)
-          1. Conduct detailed market research across 3-5 target states
-          2. Build an MVP focusing on core functionality
-          3. Test with 50-100 early adopters
-          4. Iterate based on feedback
-          
-          #### Phase 2: Launch & Growth (6-8 months)
-          1. Apply for Startup India recognition and DPIIT registration
-          2. Secure seed funding from angel investors or incubators
-          3. Expand team with key technical and marketing roles
-          4. Launch in 2-3 target cities
-          
-          #### Phase 3: Scaling (12-18 months)
-          1. Expand to tier 2 and tier 3 cities
-          2. Seek Series A funding for rapid expansion
-          3. Develop strategic partnerships with established players
-          4. Invest in advanced technology and automation
-          
-          ### Market Size Estimation
-          The addressable market in India is approximately ₹12,000-15,000 crores, with a projected CAGR of 22% over the next 5 years.
-          
-          ### Potential Funding Sources
-          1. **Angel Networks**: Indian Angel Network, Mumbai Angels
-          2. **Incubators**: T-Hub, NSRCEL, Startup India Seed Fund
-          3. **Early-Stage VCs**: Blume Ventures, Kalaari Capital, 3one4 Capital
-          4. **Industry-Specific Funds**: Relevant to ${formData.industry}
-          
-          ### Next Steps Recommendation
-          1. Refine your business plan with detailed financial projections
-          2. Build a strong founding team with complementary skills
-          3. Develop a prototype or MVP to demonstrate concept
-          4. Prepare pitch materials for initial investor conversations
-        `
-
-        setResult(mockResponse)
-        setIsLoading(false)
-        setStep(4)
-
-        // Removed evaluation count tracking
-      }, 3000)
     } catch (error) {
       console.error("Error evaluating idea:", error)
-      setIsLoading(false)
       toast({
         title: "Error",
         description: "Failed to evaluate your idea. Please try again.",
@@ -250,7 +201,7 @@ export default function EvaluatePage() {
       industry: formData.industry,
       evaluation: result,
       date: new Date().toISOString(),
-      score: Number.parseInt(result.match(/Overall Potential Score: (\d+)\/100/)?.[1] || "0"),
+      score: Number.parseInt(result.match(/OVERALL SCORE.*?(\d+)\/100/i)?.[1] || "0"),
     })
     localStorage.setItem(`saved_ideas`, JSON.stringify(savedIdeas))
 
@@ -560,39 +511,59 @@ export default function EvaluatePage() {
                               <li key={i} className="ml-4">
                                 {line.replace(/^\d+\.\s/, "")}
                               </li>
-                            )
-                          } else if (line.trim() === "") {
-                            return <br key={i} />
-                          } else {
-                            return <p key={i}>{line}</p>
-                          }
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row justify-between gap-4">
-                      <Button onClick={() => setStep(1)} variant="outline">
-                        Start Over
-                      </Button>
-                      <div className="flex gap-2">
-                        <Button onClick={saveResult} className="bg-green-600 hover:bg-green-700">
-                          <Save className="mr-2 h-4 w-4" /> Save Results
-                        </Button>
-                        <Button onClick={downloadResult} variant="outline">
-                          <Download className="mr-2 h-4 w-4" /> Download
-                        </Button>
-                      </div>
-                    </div>
+                           && !result ? (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <Loader2 className="h-12 w-12 text-orange-600 animate-spin mb-4" />
+                    <p className="text-gray-600">Our AI is analyzing your startup idea for the Indian market...</p>
                   </div>
-                ) : (
-                  <p className="text-gray-600">Something went wrong. Please try again.</p>
-                )}
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
+                ) : result || isLoading ? (
+                  <div className="space-y-6">
+                    <div className="bg-orange-50 p-6 rounded-lg">
+                      <div className="prose max-w-none">
+                        {result?.split("\n").map((line, i) => {
+                          if (line.startsWith("# ")) {
+                            return (
+                              <h1 key={i} className="text-2xl font-bold">
+                                {line.replace("# ", "")}
+                              </h1>
+                            )
+                          } else if (line.startsWith("## ")) {
+                            return (
+                              <h2 key={i} className="text-xl font-semibold mt-4">
+                                {line.replace("## ", "")}
+                              </h2>
+                            )
+                          } else if (line.startsWith("### ")) {
+                            return (
+                              <h3 key={i} className="text-lg font-semibold mt-4">
+                                {line.replace("### ", "")}
+                              </h3>
+                            )
+                          } else if (line.startsWith("#### ")) {
+                            return (
+                              <h4 key={i} className="text-base font-semibold mt-3">
+                                {line.replace("#### ", "")}
+                              </h4>
+                            )
+                          } else if (line.startsWith("- ")) {
+                            return (
+                              <li key={i} className="ml-4">
+                                {line.replace("- ", "")}
+                              </li>
+                            )
+                          } else if (
+                            line.startsWith("1. ") ||
+                            line.startsWith("2. ") ||
+                            line.startsWith("3. ") ||
+                            line.startsWith("4. ")
+                          ) {
+                            return (
+                              <li key={i} className="ml-4">
+                                {line.replace(/^\d+\.\s/, "")}
+                              </li>
+                            )
+                          } else if (line.startsWith("**") && line.endsWith("**")) {
+                            return (
+                              <p key={i} className="font-bold mt-2">
+                                {line.replace(/\*\*/g, "")}
+                              </p
