@@ -460,7 +460,58 @@ export default function EvaluatePage() {
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold">Your Idea Evaluation</h2>
 
-                {isLoading && !result ? (
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <Loader2 className="h-12 w-12 text-orange-600 animate-spin mb-4" />
+                    <p className="text-gray-600">Our AI is analyzing your startup idea for the Indian market...</p>
+                    <p className="text-gray-500 text-sm mt-2">This may take up to 30 seconds</p>
+                  </div>
+                ) : result ? (
+                  <div className="space-y-6">
+                    <div className="bg-orange-50 p-6 rounded-lg">
+                      <div className="prose max-w-none">
+                        {result.split("\n").map((line, i) => {
+                          if (line.startsWith("# ")) {
+                            return (
+                              <h1 key={i} className="text-2xl font-bold">
+                                {line.replace("# ", "")}
+                              </h1>
+                            )
+                          } else if (line.startsWith("## ")) {
+                            return (
+                              <h2 key={i} className="text-xl font-semibold mt-4">
+                                {line.replace("## ", "")}
+                              </h2>
+                            )
+                          } else if (line.startsWith("### ")) {
+                            return (
+                              <h3 key={i} className="text-lg font-semibold mt-4">
+                                {line.replace("### ", "")}
+                              </h3>
+                            )
+                          } else if (line.startsWith("#### ")) {
+                            return (
+                              <h4 key={i} className="text-base font-semibold mt-3">
+                                {line.replace("#### ", "")}
+                              </h4>
+                            )
+                          } else if (line.startsWith("- ")) {
+                            return (
+                              <li key={i} className="ml-4">
+                                {line.replace("- ", "")}
+                              </li>
+                            )
+                          } else if (
+                            line.startsWith("1. ") ||
+                            line.startsWith("2. ") ||
+                            line.startsWith("3. ") ||
+                            line.startsWith("4. ")
+                          ) {
+                            return (
+                              <li key={i} className="ml-4">
+                                {line.replace(/^\d+\.\s/, "")}
+                              </li>
+                           && !result ? (
                   <div className="flex flex-col items-center justify-center py-12">
                     <Loader2 className="h-12 w-12 text-orange-600 animate-spin mb-4" />
                     <p className="text-gray-600">Our AI is analyzing your startup idea for the Indian market...</p>

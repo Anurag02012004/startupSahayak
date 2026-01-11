@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -19,23 +19,17 @@ export default function PaymentPage() {
   const { toast } = useToast()
 
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
-  const [paymentDetails, setPaymentDetails] = useState({
-    cardNumber: "",
-    cardName: "",
-    expiryDate: "",
-    cvv: "",
-    couponCode: "",
-  })
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  // Get plan details from URL query params
-  useState(() => {
-    const params = new URLSearchParams(window.location.search)
-    const plan = params.get("plan")
-    if (plan) {
-      setSelectedPlan(plan)
+  
+  // Get plan details from URL query params - CLIENT SIDE ONLY
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search)
+      const plan = params.get("plan")
+      if (plan) {
+        setSelectedPlan(plan)
+      }
     }
-  })
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
